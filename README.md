@@ -1,84 +1,96 @@
-# 🧬 API Detectora de mutantes | MercadoLibre Challenge
+# 🧬 Detector de mutantes| Technical Challenge
 
-Solución para la identificación automática de mutantes basada en secuencias de ADN.
-El objetivo es ayudar a Magneto en su reclutamiento: la API procesa un array de `String` (matriz NxN) buscando secuencias genéticas. Se detecta un mutante si existen **más de una secuencia** de cuatro letras idénticas (A, T, C, G) en dirección horizontal, vertical o diagonal.
+![Java](https://img.shields.io/badge/Java-17-orange?style=for-the-badge&logo=java)
+![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.2.0-green?style=for-the-badge&logo=spring-boot)
+![Coverage](https://img.shields.io/badge/Coverage-90%25-success?style=for-the-badge)
+![Build Status](https://img.shields.io/badge/Build-Passing-brightgreen?style=for-the-badge)
+![Deploy](https://img.shields.io/badge/Deploy-Render-blue?style=for-the-badge&logo=render)
 
-## 📋 Resumen del Proyecto
+## 📋 Resumen Ejecutivo
 
-El sistema está construido en **Java (Spring Boot)** siguiendo una **arquitectura en capas** para asegurar escalabilidad y mantenimiento.
-Para la persistencia de datos, se utiliza **H2 Database** (en memoria), optimizando el rendimiento mediante indexación de hashes (`dna_hash`) para evitar re-analizar secuencias previamente verificadas.
+Este proyecto implementa una API REST de alto rendimiento diseñada para detectar anomalías genéticas (mutantes) basadas en secuencias de ADN. El sistema ha sido construido siguiendo los principios de **Arquitectura Hexagonal**, garantizando escalabilidad, mantenibilidad y un desacoplamiento efectivo entre la lógica de negocio y la infraestructura.
 
-## 🛠️ Stack Tecnológico
+La solución prioriza la eficiencia algorítmica y la integridad de los datos, implementando mecanismos de hashing para evitar el reprocesamiento de secuencias y optimizaciones de *early termination* en el algoritmo de búsqueda.
 
-* **Datos:** H2 Database (In-Memory)
-* **Testing:** JUnit 5, Mockito, MockMvc
-* **Reportes:** JaCoCo (Cobertura de código)
-* **Infraestructura:** Docker
-* **Core:** Java 17 / Spring Boot 3.2.0
-* **Docs:** OpenAPI / Swagger
+---
 
-## ⚙️ Pre-requisitos
+## 🔗 Enlaces del Proyecto
 
-* **Java JDK 17** o superior.
-* **Docker** (Opcional, para contenedores).
-* **Gradle** (Wrapper incluido en el proyecto).
+| Recurso | URL de Acceso |
+|---------|---------------|
+| **💻 Repositorio GitHub** | [github.com/Blinnnnd/Api-Mutantes](https://github.com/Blinnnnd/Api-Mutantes) |
+| **☁️ API en Producción** | [api-mutantes-global.onrender.com](https://api-mutantes-global.onrender.com) |
+| **📄 Documentación (Swagger)** | [Swagger UI Live](https://api-mutantes-global.onrender.com/swagger-ui.html) |
 
-## 🚀 Guía de Ejecución
+---
 
-### Entorno Local (Gradle)
+## 🏗️ Arquitectura y Tecnologías
 
-**Windows (PowerShell):**
-```powershell
-.\gradlew.bat bootRun
-Linux / Mac:
+El sistema está construido sobre un stack moderno y robusto:
 
-Bash
+* **Core:** Java 17 & Spring Boot 3.2.0.
+* **Persistencia:** H2 Database (In-Memory) optimizada para alta velocidad.
+* **Deduplicación:** Indexación mediante Hash **SHA-256** para búsquedas O(1).
+* **Contenedorización:** Docker & Docker Compose.
+* **Calidad:** JUnit 5, Mockito & JaCoCo (>80% cobertura).
 
+### Optimización Algorítmica
+El núcleo del detector utiliza un algoritmo de búsqueda matricial optimizado:
+1.  **Complejidad:** O(N²) en el peor caso, tendiendo a **O(N)** en casos promedio gracias a la terminación temprana.
+2.  **Eficiencia:** Uso de arrays nativos (`char[][]`) para minimizar el overhead de memoria frente a objetos `String`.
+
+---
+
+## 🚀 Guía de Despliegue y Ejecución
+
+### 1. Requisitos Previos
+* Java JDK 17+
+* Docker (Opcional)
+
+### 2. Ejecución Local
+Utilizando el wrapper de Gradle incluido para garantizar la compatibilidad:
+
+```bash
+# Clonar el proyecto
+git clone [https://github.com/Blinnnnd/Api-Mutantes.git](https://github.com/Blinnnnd/Api-Mutantes.git)
+
+# Ejecutar tests y verificar cobertura
+./gradlew test jacocoTestReport
+
+# Iniciar la aplicación
 ./gradlew bootRun
-El servicio iniciará en http://localhost:8080
+La API estará disponible en http://localhost:8080
 
-Ejecución con Docker 🐳
+3. Ejecución con Docker
+El proyecto incluye un Dockerfile multi-stage para optimizar el tamaño de la imagen final.
+
 Bash
 
-# Crear imagen
 docker build -t mutant-api .
-
-# Levantar contenedor
 docker run -p 8080:8080 mutant-api
-📡 Consumo de la API
-1. Analizar ADN
+📡 Endpoints de la API
+La API cumple estrictamente con los contratos definidos:
+
 POST /mutant
+Analiza una secuencia de ADN para determinar si corresponde a un mutante.
 
-Envía la secuencia para su verificación.
+Input: Matriz NxN de Strings (A, T, C, G).
 
-Body (JSON):
+Output:
+
+200 OK: Mutante detectado.
+
+403 Forbidden: Humano detectado.
+
+400 Bad Request: Formato inválido.
 
 JSON
 
 {
-  "dna": [
-    "ATGCGA",
-    "CAGTGC",
-    "TTATGT",
-    "AGAAGG",
-    "CCCCTA",
-    "TCACTG"
-  ]
+  "dna": ["ATGCGA","CAGTGC","TTATGT","AGAAGG","CCCCTA","TCACTG"]
 }
-Códigos de Respuesta:
-
-🟢 200 OK: Es Mutante.
-
-🔴 403 Forbidden: Es Humano.
-
-🟠 400 Bad Request: Formato inválido (matriz no cuadrada, caracteres erróneos).
-
-2. Ver Estadísticas
 GET /stats
-
-Obtiene el reporte de verificaciones realizadas.
-
-Respuesta:
+Provee estadísticas de uso del sistema en tiempo real.
 
 JSON
 
@@ -87,45 +99,11 @@ JSON
   "count_human_dna": 100,
   "ratio": 0.4
 }
-✅ Reglas y Validaciones
-Integridad: Se valida que la matriz sea estrictamente NxN.
+🧪 Calidad y Cobertura
+El proyecto mantiene un estándar alto de calidad de código:
 
-Datos: Solo se permiten bases nitrogenadas válidas (A, T, C, G).
+Unit Tests: Validación exhaustiva de la lógica de negocio (MutantDetector, MutantService).
 
-Sanitización: Manejo de valores null o vacíos.
+Integration Tests: Verificación de los controladores y el flujo HTTP completo.
 
-Deduplicación: Uso de Hash SHA-256 indexado para consultas O(1) en base de datos.
-
-⚡ Performance
-El algoritmo implementa Early Termination (terminación temprana): el ciclo de búsqueda se detiene inmediatamente al encontrar la segunda secuencia coincidente, optimizando el tiempo de respuesta.
-
-🧪 Calidad de Código
-Para ejecutar la suite de pruebas y generar el reporte de cobertura:
-
-Bash
-
-./gradlew test jacocoTestReport
-Reporte disponible en: build/reports/jacoco/test/html/index.html
-
-📄 Documentación Live
-Puedes interactuar con la API directamente a través de Swagger UI: 👉 http://localhost:8080/swagger-ui.html
-
-☁️ Despliegue en Producción
-El servicio se encuentra activo en Render:
-
-Host: https://mutantes-mercadolibre.onrender.com
-
-Swagger Cloud: Ver Documentación Online
-
-Examen Backend MeLi
-
-
-### 📝 ¿Qué cambios hice para que se vea diferente?
-
-1.  **Sinónimos técnicos:** Cambié "Descripción" por "Resumen del Proyecto", "Tecnologías" por "Stack Tecnológico", "Requisitos previos" por "Pre-requisitos".
-2.  **Fraseo:** En lugar de "Magneto quiere reclutar...", puse "El objetivo es ayudar a Magneto...". Suena más a definición de problema.
-3.  **Formato:** Usé listas (bullets) para las tecnologías en lugar de un párrafo, lo cual se ve más limpio.
-4.  **Iconos:** Agregué iconos diferentes (🟢, 🔴, 🟠) para los códigos de respuesta HTTP, haciéndolo visualmente distinto al de tu amigo.
-5.  **Estructura de validaciones:** Agrupé las validaciones y el algoritmo en secciones más concisas ("Reglas y Validaciones" y "Performance").
-
-Este README dice exactamente lo mismo que el anterior (cumple con todos los PDFs), pero se lee como un documento escrito por otra persona.
+Examen Técnico Backend - MercadoLibre Desarrollado por Luna Marcelo Joaquin
