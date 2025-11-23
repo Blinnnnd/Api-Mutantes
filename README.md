@@ -6,7 +6,7 @@
 ![Build Status](https://img.shields.io/badge/Build-Passing-brightgreen?style=for-the-badge)
 ![Deploy](https://img.shields.io/badge/Deploy-Render-blue?style=for-the-badge&logo=render)
 
-## 📋 Resumen Ejecutivo
+## Resumen Ejecutivo
 
 Este proyecto implementa una API REST de alto rendimiento diseñada para detectar anomalías genéticas (mutantes) basadas en secuencias de ADN. El sistema ha sido construido siguiendo los principios de **Arquitectura Hexagonal**, garantizando escalabilidad, mantenibilidad y un desacoplamiento efectivo entre la lógica de negocio y la infraestructura.
 
@@ -14,7 +14,7 @@ La solución prioriza la eficiencia algorítmica y la integridad de los datos, i
 
 ---
 
-## 🔗 Enlaces del Proyecto
+## Enlaces del Proyecto
 
 | Recurso | URL de Acceso |
 |---------|---------------|
@@ -24,7 +24,7 @@ La solución prioriza la eficiencia algorítmica y la integridad de los datos, i
 
 ---
 
-## 🏗️ Arquitectura y Tecnologías
+## Arquitectura y Tecnologías
 
 El sistema está construido sobre un stack moderno y robusto:
 
@@ -41,7 +41,7 @@ El núcleo del detector utiliza un algoritmo de búsqueda matricial optimizado:
 
 ---
 
-## 🚀 Guía de Despliegue y Ejecución
+## Guía de Despliegue y Ejecución
 
 ### 1. Requisitos Previos
 * Java JDK 17+
@@ -68,7 +68,7 @@ Bash
 
 docker build -t mutant-api .
 docker run -p 8080:8080 mutant-api
-📡 Endpoints de la API
+- Endpoints de la API
 La API cumple estrictamente con los contratos definidos:
 
 POST /mutant
@@ -99,7 +99,8 @@ JSON
   "count_human_dna": 100,
   "ratio": 0.4
 }
-🧪 Calidad y Cobertura
+- Calidad y Cobertura
+
 El proyecto mantiene un estándar alto de calidad de código:
 
 Unit Tests: Validación exhaustiva de la lógica de negocio (MutantDetector, MutantService).
