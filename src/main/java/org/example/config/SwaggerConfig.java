@@ -12,8 +12,8 @@ public class SwaggerConfig {
     @Bean
     public OpenAPI mutantOpenAPI() {
         return new OpenAPI().info(new Info()
-                .title("Cerebro - Detector de Mutantes")
-                .description("Sistema de reclutamiento para la Hermandad de Mutantes. Analiza secuencias de ADN.")
+                .title("Detector de Mutantes - Analizador de ADN")
+                .description("Sistema de deteccion de mutantes, Analiza secuencias de ADN.")
                 .version("2.0.0")
                 .contact(new Contact().name("Luna Joaquin").email("Jmluna200420@gmail.com"))); 
     }
