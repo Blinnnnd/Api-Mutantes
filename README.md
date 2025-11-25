@@ -72,7 +72,7 @@ docker run -p 8080:8080 mutant-api
 - Endpoints de la API
 La API cumple estrictamente con los contratos definidos:
 
-POST /mutant
+POST /api/mutant
 Analiza una secuencia de ADN para determinar si corresponde a un mutante.
 
 Input: Matriz NxN de Strings (A, T, C, G).
@@ -88,16 +88,6 @@ Output:
 JSON
 MUTANTES EJEMPLOS
 {
-  "dna": [
-    "ATGCGA",
-    "CAGTGC",
-    "TTATGT",
-    "AGAAGG",
-    "CCCCTA",
-    "TCACTG"
-  ]
-}
-{
   "dna": ["ATGCGA",
           "CAGTGC",
           "TTATGT",
@@ -107,7 +97,6 @@ MUTANTES EJEMPLOS
 }
 
 HUMANOS EJEMPLOS
-
 {
     "dna": [
         "ATGCGA",
@@ -120,7 +109,7 @@ HUMANOS EJEMPLOS
 }
 
 
-GET /stats
+GET /api/stats
 Provee estadísticas de uso del sistema en tiempo real.
 
 JSON
